@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách sản phẩm</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Danh sách sản phẩm</h1>
+    
+    <div class="container">
+        <div class="product-list">
+            <h2>Sản phẩm</h2>
+            <ul id="products"></ul>
+        </div>
+        
+        <div class="product-details" id="productDetails">
+            <div class="no-selection">Hãy chọn một sản phẩm để xem chi tiết</div>
+        </div>
+    </div>
+
+    <script>
+        const productsData = [
+            {
+                id: 1,
+                name: "Điện thoại Samsung Galaxy S21",
+                price: 14990000,
+                description: "Điện thoại Samsung Galaxy S21 với màn hình Dynamic AMOLED 2X, chip Exynos 2100, RAM 8GB, bộ nhớ trong 128GB, camera chính 64MP, pin 4000mAh.",
+                image: "https://cdn.tgdd.vn/Products/Images/42/220833/samsung-galaxy-s21-tim-600x600.jpg",
+                category: "Điện thoại",
+                rating: 4.5
+            },
+            {
+                id: 2,
+                name: "Laptop Dell XPS 13",
+                price: 29990000,
+                description: "Laptop Dell XPS 13 với màn hình 13.4 inch FHD+, Intel Core i7-1165G7, RAM 16GB, SSD 512GB, Intel Iris Xe Graphics.",
+                image: "https://bizweb.dktcdn.net/thumb/1024x1024/100/501/863/products/16152-ec469a9d-6509-4b31-b477-7b9f771e65eb-05b0c448-1414-4559-9e0d-680349a2a046-5120fc87-f202-4bcf-8f3a-39ca40bf03c7-c8736e11-2ff6-44c5-8730-c0aa7c71a53c.jpg?v=1699675108230",
+                category: "Laptop",
+                rating: 4.8
+            },
+            {
+                id: 3,
+                name: "Tai nghe Apple AirPods Pro",
+                price: 4990000,
+                description: "Tai nghe không dây Apple AirPods Pro với tính năng chống ồn chủ động, chống nước IPX4, chip H1.",
+                image: "https://cdn.tgdd.vn/Products/Images/54/315014/tai-nghe-bluetooth-airpods-pro-2nd-gen-usb-c-charge-apple-1-750x500.jpg",
+                category: "Tai nghe",
+                rating: 4.7
+            },
+            {
+                id: 4,
+                name: "Đồng hồ thông minh Apple Watch Series 7",
+                price: 9990000,
+                description: "Đồng hồ thông minh Apple Watch Series 7 với màn hình Retina luôn bật, kết nối GPS + Cellular, chống nước đến 50m.",
+                image: "https://cdn.tgdd.vn/Products/Images/7077/250638/dong-ho-apple-watch-s7-45mm-xanh-thumbnew-600x600.jpeg",
+                category: "Đồng hồ thông minh",
+                rating: 4.6
+            },
+            {
+                id: 5,
+                name: "Máy ảnh Sony Alpha A7 III",
+                price: 39990000,
+                description: "Máy ảnh Sony Alpha A7 III với cảm biến full-frame 24.2MP, quay phim 4K HDR, chống rung 5 trục, 693 điểm lấy nét.",
+                image: "https://ngoccamera.vn/pic/tintuc/27022018/15197032054_4251554_Sony_A7III_tinhte_2.jpg",
+                category: "Máy ảnh",
+                rating: 4.9
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const productsList = document.getElementById('products');
+            const productDetails = document.getElementById('productDetails');
+            
+            renderProductList = () => {
+                productsData.forEach(product => {
+                    const li = document.createElement('li');
+                    li.className = 'product-item';
+                    li.setAttribute('data-id', product.id);
+                    li.textContent = product.name;
+                    li.addEventListener('click', () => {
+                        showProductDetails(product.id);
+                        
+                        document.querySelectorAll('.product-item').forEach(item => {
+                            item.classList.remove('active');
+                        });
+                        li.classList.add('active');
+                    });
+                    productsList.appendChild(li);
+                });
+            }
+            
+            showProductDetails = (productId) => {
+                const product = productsData.find(p => p.id === productId);
+                
+                if (product) {
+                    productDetails.style.display = 'block';
+                    
+                    const formattedPrice = new Intl.NumberFormat('vi-VN', { 
+                        style: 'currency', 
+                        currency: 'VND' 
+                    }).format(product.price);
+                    
+                    const ratingStars = '★'.repeat(Math.floor(product.rating)) + 
+                                    (product.rating % 1 ? '½' : '') + 
+                                    '☆'.repeat(5 - Math.ceil(product.rating));
+                    
+                    productDetails.innerHTML = `
+                        <h2>${product.name}</h2>
+                        <img src="${product.image}" alt="${product.name}" />
+                        <p class="price">${formattedPrice}</p>
+                        <p class="description">${product.description}</p>
+                        <span class="category">${product.category}</span>
+                        <div class="rating">${ratingStars} (${product.rating})</div>
+                    `;
+                }
+            }
+            
+            renderProductList();
+        });
+    </script>
+</body>
+</html>
